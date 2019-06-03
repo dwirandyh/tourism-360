@@ -1,0 +1,10 @@
+import dotenv from "dotenv";
+const envFile = process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : `.env`;
+dotenv.config({ path: envFile });
+export const PORT = process.env.PORT;
+export const JWT_SECRET = process.env.JWT_SECRET;
+export const DB_CONNECTION = process.env.DB_CONNECTION;
+export const DB_PORT = process.env.DB_PORT;
+export const DB_USERNAME = process.env.DB_USERNAME;
+export const DB_PASSWORD = process.env.DB_PASSWORD;
+export const DB_DATABSE = process.env.DB_DATABSE;
