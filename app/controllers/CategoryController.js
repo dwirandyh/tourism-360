@@ -1,19 +1,31 @@
 import { validationResult } from "express-validator/check";
-import { Category } from "../../database/models";
+import { Sequelize } from "../../database/models";
+import CategoryRepository from "../repositories/CategoryRepository";
 
 class CategoryController {
   static async index(req, res) {
-    const categories = await Category.findAll();
+    let categories = [];
+    const query = req.query.name;
+    if (query) {
+      const Op = Sequelize.Op;
+      const options = {
+        where: {
+          name: {
+            [Op.like]: `%${query}%`
+          }
+        }
+      };
+
+      categories = await CategoryRepository.search(req, options);
+    } else {
+      categories = await CategoryRepository.getData(req);
+    }
     res.json(categories);
   }
 
   static async detail(req, res) {
     const id = req.params.id;
-    const category = await Category.findOne({
-      where: {
-        id: id
-      }
-    });
+    const category = CategoryRepository.getDetail(id);
 
     if (!category) {
       return res.status(404).json({ errors: "Category not found" });
@@ -30,7 +42,7 @@ class CategoryController {
 
     const { name, description } = req.body;
     try {
-      const category = await Category.create({
+      const category = await CategoryRepository.create({
         name: name,
         description: description
       });
@@ -52,17 +64,13 @@ class CategoryController {
 
     try {
       const id = req.params.id;
-      let category = await Category.findOne({
-        where: {
-          id: id
-        }
-      });
+      let category = await CategoryRepository.detail(id);
 
       if (!category) {
         return res.status(404).json({ errors: "Category not found" });
       }
 
-      await Category.update(
+      await CategoryRepository.update(
         {
           name: name,
           description: description
@@ -74,11 +82,7 @@ class CategoryController {
         }
       );
 
-      category = await Category.findOne({
-        where: {
-          id: id
-        }
-      });
+      category = await CategoryRepository.detail(id);
 
       res.json(category);
     } catch (err) {
@@ -89,18 +93,14 @@ class CategoryController {
 
   static async delete(req, res) {
     const id = req.params.id;
-    let category = await Category.findOne({
-      where: {
-        id: id
-      }
-    });
+    let category = await CategoryRepository.detail(id);
 
     if (!category) {
       return res.status(404).json({ errors: "Category not found" });
     }
 
     try {
-      Category.destroy({
+      await CategoryRepository.destroy({
         where: {
           id: id
         }
