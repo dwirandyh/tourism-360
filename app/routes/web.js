@@ -1,5 +1,6 @@
 import express from "express";
 import { User, Category } from "../middleware/Validation";
+import { upload } from "../middleware/Upload";
 import UserController from "../controllers/UserController";
 import CategoryController from "../controllers/CategoryController";
 import Auth from "../middleware/Auth";
@@ -13,7 +14,13 @@ router.get("/api/me/", Auth, UserController.detail);
 
 router.get("/api/category", [Auth], CategoryController.index);
 router.get("/api/category/:id", [Auth], CategoryController.detail);
-router.post("/api/category", [Auth], Category.insert, CategoryController.store);
+router.post(
+  "/api/category",
+  Auth,
+  upload.single("thumbnail"),
+  Category.insert,
+  CategoryController.store
+);
 router.put("/api/category/:id", [Auth], CategoryController.update);
 router.delete("/api/category/:id", [Auth], CategoryController.delete);
 

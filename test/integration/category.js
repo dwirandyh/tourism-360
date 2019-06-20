@@ -1,19 +1,29 @@
 process.env.NODE_ENV = "test";
 
-import { Category } from "../database/models";
+import { Category } from "../../database/models";
 import chai from "chai";
 import chaiHttp from "chai-http";
-import server from "../index";
-const should = chai.should();
+import server from "../../index";
+import { User } from "../../database/models";
+
+const expect = chai.expect;
 
 chai.use(chaiHttp);
 
+let jwtToken = "";
+
 describe("Categories", () => {
-  beforeEach(done => {
-    Category.destroy({
-      where: {},
-      truncate: true
-    }).then(() => {
+  before(async () => {
+    const user = await User.findOne();
+    const payload = {
+      user: {
+        id: user.id
+      }
+    };
+
+    User.jwtToken(payload, (err, token) => {
+      if (err) throw err;
+      jwtToken = token;
       done();
     });
   });
@@ -23,9 +33,10 @@ describe("Categories", () => {
       chai
         .request(server)
         .get("/api/category")
+        .set("x-auth-token", jwtToken)
         .end((err, res) => {
-          res.should.have.status(200);
-          res.body.should.be.a("array");
+          expect(res).to.have.status(200);
+          expect(res.body).to.be.a("object");
           done();
         });
     });
@@ -40,10 +51,13 @@ describe("Categories", () => {
       chai
         .request(server)
         .post("/api/category")
+        .set("x-auth-token", jwtToken)
         .send(category)
         .end((err, res) => {
-          res.should.have.status(400);
-          res.body.errors[0].param.should.eql("name");
+          console.log(res.body);
+          expect(res).to.have.status(400);
+          expect(res.body.errors[0].param).to.equal("name");
+          //res.body.errors[0].param.should.eql("name");
           done();
         });
     });
@@ -57,10 +71,11 @@ describe("Categories", () => {
       chai
         .request(server)
         .post("/api/category")
+        .set("x-auth-token", jwtToken)
         .send(category)
         .end((err, res) => {
-          res.should.have.status(200);
-          res.body.name.should.eql(category.name);
+          expect(res).to.have.status(200);
+          expect(res.body.name).to.equal(category.name);
           done();
         });
     });
@@ -76,11 +91,18 @@ describe("Categories", () => {
       const response = await chai
         .request(server)
         .get("/api/category/" + data.id)
+        .set("x-auth-token", jwtToken)
         .send();
 
-      response.should.have.status(200);
-      response.body.should.be.a("object");
-      response.body.should.have.property("name");
+      console.log("/api/category/" + data.id);
+      console.log(response.body);
+
+      expect(response).to.have.status(200);
+      expect(response.body).to.be.a("object");
+      expect(response.body).to.have.property("name");
+      // response.should.have.status(200);
+      // response.body.should.be.a("object");
+      // response.body.should.have.property("name");
     });
   });
 
@@ -94,12 +116,17 @@ describe("Categories", () => {
       const response = await chai
         .request(server)
         .put("/api/category/" + data.id)
+        .set("x-auth-token", jwtToken)
         .send({ name: "Category", description: "Description" });
 
-      response.should.have.status(200);
-      response.body.should.be.a("object");
-      response.body.should.have.property("name").eql("Category");
-      response.body.should.have.property("description").eql("Description");
+      expect(response).to.have.status(200);
+      expect(response.body).to.be.a("object");
+      expect(response.body)
+        .to.have.property("name")
+        .to.equal("Category");
+      expect(response.body)
+        .to.have.property("description")
+        .to.equal("Description");
     });
   });
 
@@ -112,11 +139,14 @@ describe("Categories", () => {
 
       const response = await chai
         .request(server)
-        .delete("/api/category/" + data.id);
+        .delete("/api/category/" + data.id)
+        .set("x-auth-token", jwtToken);
 
-      response.should.have.status(200);
-      response.body.should.be.a("object");
-      response.body.should.have.property("msg").eql("Category removed");
+      expect(response).to.have.status(200);
+      expect(response.body).to.be.a("object");
+      expect(response.body)
+        .to.have.property("msg")
+        .to.equal("Category removed");
     });
   });
 });

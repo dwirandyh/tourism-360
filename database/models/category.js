@@ -7,7 +7,8 @@ module.exports = (sequelize, DataTypes) => {
     "Category",
     {
       name: DataTypes.STRING,
-      description: DataTypes.TEXT
+      description: DataTypes.TEXT,
+      thumbnail: DataTypes.TEXT
     },
     {}
   );

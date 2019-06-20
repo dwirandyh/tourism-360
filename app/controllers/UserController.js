@@ -109,9 +109,9 @@ class UserController {
         }
       };
 
-      jwt.sign(payload, JWT_SECRET, { expiresIn: 360000 }, (err, token) => {
+      User.jwtToken(payload, (err, token) => {
         if (err) throw err;
-        res.json({ token });
+        return res.json({ token });
       });
     } catch (err) {
       console.error(err.message);

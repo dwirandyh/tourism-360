@@ -4,6 +4,8 @@ import bodyParser from "body-parser";
 import router from "./app/routes/web";
 import hbs from "express-handlebars";
 import path from "path";
+import multer from "multer";
+const upload = multer();
 
 const app = express();
 
@@ -27,7 +29,7 @@ app.use(morgan("dev"));
 app.use(bodyParser.json());
 
 //support parsing of application/x-www-form-urlencoded post data
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
 app.use(router);
 
