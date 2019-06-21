@@ -1,18 +1,27 @@
-'use strict';
+"use strict";
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('TodoItems', {
+    return queryInterface.createTable("TouristGalleries", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      content: {
+      title: {
         type: Sequelize.STRING
       },
-      complete: {
-        type: Sequelize.BOOLEAN
+      thumbnail: {
+        type: Sequelize.STRING
+      },
+      touristAttractionId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: "TouristAttractions",
+          key: "id"
+        },
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL"
       },
       createdAt: {
         allowNull: false,
@@ -21,19 +30,10 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
-      },
-      todoId: {
-        type: Sequelize.INTEGER,
-        onDelete: 'CASCADE',
-        references: {
-          model: 'Todos',
-          key: 'id',
-          as: 'todoId',
-        }
       }
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('TodoItems');
+    return queryInterface.dropTable("TouristGalleries");
   }
 };
