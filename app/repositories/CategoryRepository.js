@@ -2,6 +2,10 @@ import { Category } from "../../database/models";
 import { page, pageSize } from "../helpers/Paginate";
 
 class CategoryRepository {
+  static async getAllCategories() {
+    return await Category.findAll();
+  }
+
   static async getData(req) {
     let options = {
       page: page(req),

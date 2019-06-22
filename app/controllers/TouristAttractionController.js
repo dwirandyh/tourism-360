@@ -86,7 +86,8 @@ class TouristAttractionController {
         shortDescription,
         description,
         latitude,
-        longitude
+        longitude,
+        thumbnail
       });
 
       res.json(tourist);
@@ -106,8 +107,28 @@ class TouristAttractionController {
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
+    let thumbnail = "";
+    if (req.file) {
+      // Resize image
+      sharp(req.file.path)
+        .resize({
+          height: 500
+        })
+        .toBuffer((err, buffer) => {
+          fs.writeFile(`./uploads/${req.file.filename}`, buffer, e => {});
+        });
 
-    const { name, description } = req.body;
+      thumbnail = req.file.filename;
+    }
+
+    const {
+      name,
+      address,
+      shortDescription,
+      description,
+      latitude,
+      longitude
+    } = req.body;
 
     try {
       const id = req.params.id;
@@ -119,8 +140,13 @@ class TouristAttractionController {
 
       await TouristAttractionRepository.update(
         {
-          name: name,
-          description: description
+          name,
+          address,
+          shortDescription,
+          description,
+          latitude,
+          longitude,
+          thumbnail
         },
         {
           where: {

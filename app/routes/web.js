@@ -20,6 +20,7 @@ router.post("/api/auth", User.auth, UserController.auth);
 
 router.get("/api/me/", Auth, UserController.detail);
 
+router.get("/api/category/all", Auth, CategoryController.all);
 router.get("/api/category", [Auth], CategoryController.index);
 router.get("/api/category/:id", [Auth], CategoryController.detail);
 router.post(
@@ -29,7 +30,13 @@ router.post(
   Category.insert,
   CategoryController.store
 );
-router.put("/api/category/:id", [Auth], CategoryController.update);
+router.put(
+  "/api/category/:id",
+  Auth,
+  upload.single("thumbnail"),
+  Category.insert,
+  CategoryController.update
+);
 router.delete("/api/category/:id", [Auth], CategoryController.delete);
 
 // Tourist Attractions
@@ -53,6 +60,7 @@ router.post(
 router.put(
   "/api/tourist-attraction/:id",
   Auth,
+  upload.single("thumbnail"),
   TouristAttraction.insert,
   TouristAttractionController.update
 );

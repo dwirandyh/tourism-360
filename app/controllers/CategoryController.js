@@ -30,6 +30,11 @@ class CategoryController {
     res.json(categories);
   }
 
+  static async all(req, res) {
+    const categories = await CategoryRepository.getAllCategories();
+    res.json(categories);
+  }
+
   /**
    * get detail category by id
    * @param {*} req
@@ -99,6 +104,23 @@ class CategoryController {
 
     const { name, description } = req.body;
 
+    let data = {
+      name: name,
+      description: description
+    };
+
+    if (req.file) {
+      sharp(req.file.path)
+        .resize({
+          height: 500
+        })
+        .toBuffer((err, buffer) => {
+          fs.writeFile(`./uploads/${req.file.filename}`, buffer, e => {});
+        });
+
+      data.thumbnail = req.file.filename;
+    }
+
     try {
       const id = req.params.id;
       let category = await CategoryRepository.detail(id);
@@ -107,17 +129,11 @@ class CategoryController {
         return res.status(404).json({ errors: "Category not found" });
       }
 
-      await CategoryRepository.update(
-        {
-          name: name,
-          description: description
-        },
-        {
-          where: {
-            id: id
-          }
+      await CategoryRepository.update(data, {
+        where: {
+          id: id
         }
-      );
+      });
 
       category = await CategoryRepository.detail(id);
 

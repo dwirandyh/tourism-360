@@ -31,6 +31,8 @@ app.use(bodyParser.json());
 //support parsing of application/x-www-form-urlencoded post data
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
+app.use("/uploads", express.static(process.cwd() + "/uploads"));
+
 app.use(router);
 
 app.engine(

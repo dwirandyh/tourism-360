@@ -29,10 +29,22 @@ describe("Categories", () => {
   });
 
   describe("/GET Categories", () => {
-    it("it should GET all categories", done => {
+    it("it should GET categories with pagination", done => {
       chai
         .request(server)
         .get("/api/category")
+        .set("x-auth-token", jwtToken)
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          expect(res.body).to.be.a("object");
+          done();
+        });
+    });
+
+    it("it shluld get all categories", done => {
+      chai
+        .request(server)
+        .get("/api/category/all")
         .set("x-auth-token", jwtToken)
         .end((err, res) => {
           expect(res).to.have.status(200);
