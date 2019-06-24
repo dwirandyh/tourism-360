@@ -25,6 +25,19 @@ class TouristGalleryController {
     res.json(galleries);
   }
 
+  static async attractionGallery(req, res) {
+    const attractionId = req.params.idAttraction;
+    try {
+      const galleries = await TouristGalleryRepository.getAttractionGallery(
+        attractionId
+      );
+      return res.json(galleries);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server Error");
+    }
+  }
+
   static async detail(req, res) {
     const id = req.params.id;
     const gallery = await TouristGalleryRepository.detail(id);

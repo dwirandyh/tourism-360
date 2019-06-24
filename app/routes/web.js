@@ -72,6 +72,11 @@ router.delete(
 
 // Tourist Gallery
 router.get("/api/tourist-gallery", Auth, TouristGalleryController.index);
+router.get(
+  "/api/tourist-gallery/attraction/:idAttraction",
+  Auth,
+  TouristGalleryController.attractionGallery
+);
 router.get("/api/tourist-gallery/:id", Auth, TouristGalleryController.detail);
 router.post(
   "/api/tourist-gallery",

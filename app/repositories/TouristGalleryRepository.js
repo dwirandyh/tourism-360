@@ -11,6 +11,14 @@ class TouristGalleryRepository {
     return await TouristGallery.paginate(options);
   }
 
+  static async getAttractionGallery(id) {
+    return await TouristGallery.findAll({
+      where: {
+        touristAttractionId: id
+      }
+    });
+  }
+
   static async search(req, options) {
     options = {
       ...options,
