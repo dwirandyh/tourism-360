@@ -99,8 +99,20 @@ router.delete(
 );
 
 // PUBLIC API
-// Attraction
+
+// Attraction Detail
+router.get(
+  "/api/v1/attraction/:id([0-9]+)",
+  TouristAttractionController.detail
+);
+
+// Popular Attraction
 router.get("/api/v1/attraction/popular", TouristAttractionController.popular);
+
+router.get(
+  "/api/v1/attraction/:id/gallery",
+  TouristAttractionController.gallery
+);
 
 // Category
 router.get("/api/v1/category", CategoryController.all);

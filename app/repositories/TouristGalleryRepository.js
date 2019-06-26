@@ -15,7 +15,8 @@ class TouristGalleryRepository {
     return await TouristGallery.findAll({
       where: {
         touristAttractionId: id
-      }
+      },
+      include: ["attraction"]
     });
   }
 

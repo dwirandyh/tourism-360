@@ -3,6 +3,7 @@ import { Sequelize } from "../../database/models";
 import TouristAttractionRepository from "../repositories/TouristAttractionRepository";
 import sharp from "sharp";
 import fs from "fs";
+import TouristGalleryRepository from "../repositories/TouristGalleryRepository";
 
 class TouristAttractionController {
   /**
@@ -197,6 +198,17 @@ class TouristAttractionController {
     try {
       const attractions = await TouristAttractionRepository.popular();
       return res.json(attractions);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server Error");
+    }
+  }
+
+  static async gallery(req, res) {
+    try {
+      const id = req.params.id;
+      const galleries = await TouristGalleryRepository.getAttractionGallery(id);
+      return res.json(galleries);
     } catch (err) {
       console.error(err.message);
       res.status(500).send("Server Error");

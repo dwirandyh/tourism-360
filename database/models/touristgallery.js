@@ -1,5 +1,6 @@
 "use strict";
 const pagination = require("../../app/helpers/Paginate").paginate;
+const touristAttraction = require("./touristattractions");
 
 module.exports = (sequelize, DataTypes) => {
   const TouristGallery = sequelize.define(
@@ -12,7 +13,10 @@ module.exports = (sequelize, DataTypes) => {
     {}
   );
   TouristGallery.associate = function(models) {
-    // associations can be defined here
+    TouristGallery.belongsTo(models.TouristAttractions, {
+      foreignKey: "touristAttractionId",
+      as: "attraction"
+    });
   };
 
   TouristGallery.paginate = async options => {
