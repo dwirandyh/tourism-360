@@ -98,4 +98,11 @@ router.delete(
   TouristGalleryController.delete
 );
 
+// PUBLIC API
+// Attraction
+router.get("/api/v1/attraction/popular", TouristAttractionController.popular);
+
+// Category
+router.get("/api/v1/category", CategoryController.all);
+
 export default router;

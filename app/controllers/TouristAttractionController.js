@@ -190,6 +190,18 @@ class TouristAttractionController {
       res.status(500).send("Server Error");
     }
   }
+
+  // Public API
+
+  static async popular(req, res) {
+    try {
+      const attractions = await TouristAttractionRepository.popular();
+      return res.json(attractions);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server Error");
+    }
+  }
 }
 
 export default TouristAttractionController;

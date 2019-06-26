@@ -29,6 +29,9 @@ module.exports = {
       longitude: {
         type: Sequelize.STRING(50)
       },
+      view: {
+        type: Sequelize.INTEGER
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

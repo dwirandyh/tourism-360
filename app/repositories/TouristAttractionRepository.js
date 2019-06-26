@@ -38,5 +38,11 @@ class TouristAttractionRepository {
   static async destroy(options) {
     return await TouristAttractions.destroy(options);
   }
+
+  static async popular() {
+    return await TouristAttractions.findAll({
+      order: [["view", "DESC"]]
+    });
+  }
 }
 export default TouristAttractionRepository;

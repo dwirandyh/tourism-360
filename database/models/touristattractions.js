@@ -11,7 +11,8 @@ module.exports = (sequelize, DataTypes) => {
       description: DataTypes.STRING,
       thumbnail: DataTypes.TEXT,
       latitude: DataTypes.STRING,
-      longitude: DataTypes.STRING
+      longitude: DataTypes.STRING,
+      view: DataTypes.INTEGER
     },
     {}
   );
