@@ -109,12 +109,22 @@ router.get(
 // Popular Attraction
 router.get("/api/v1/attraction/popular", TouristAttractionController.popular);
 
+// get attraction gallery
 router.get(
   "/api/v1/attraction/:id/gallery",
   TouristAttractionController.gallery
 );
 
+// Search Attraction
+router.get(
+  "/api/v1/attraction/search",
+  TouristAttractionController.searchAttraction
+);
+
 // Category
 router.get("/api/v1/category", CategoryController.all);
+
+// Get Attraction
+router.get("/api/v1/category/:id/attraction", CategoryController.getAttraction);
 
 export default router;

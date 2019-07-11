@@ -12,7 +12,7 @@ class TouristAttractionController {
    * @param {*} res
    */
   static async index(req, res) {
-    let categories = [];
+    let attractions = [];
     const query = req.query.name;
     if (query) {
       const Op = Sequelize.Op;
@@ -24,11 +24,11 @@ class TouristAttractionController {
         }
       };
 
-      categories = await TouristAttractionRepository.search(req, options);
+      attractions = await TouristAttractionRepository.search(req, options);
     } else {
-      categories = await TouristAttractionRepository.getData(req);
+      attractions = await TouristAttractionRepository.getData(req);
     }
-    res.json(categories);
+    res.json(attractions);
   }
 
   /**
@@ -209,6 +209,40 @@ class TouristAttractionController {
       const id = req.params.id;
       const galleries = await TouristGalleryRepository.getAttractionGallery(id);
       return res.json(galleries);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server Error");
+    }
+  }
+
+  static async searchAttraction(req, res) {
+    const query = req.query.q;
+    if (!query) {
+      return res.status(404).json({ msg: "Keyword is required" });
+    }
+    try {
+      const Op = Sequelize.Op;
+      const options = {
+        where: {
+          [Op.or]: [
+            {
+              name: {
+                [Op.like]: `%${query}%`
+              }
+            },
+            {
+              shortDescription: {
+                [Op.like]: `%${query}%`
+              }
+            }
+          ]
+        }
+      };
+
+      const attractions = await TouristAttractionRepository.searchAttraction(
+        options
+      );
+      res.json(attractions);
     } catch (err) {
       console.error(err.message);
       res.status(500).send("Server Error");

@@ -1,4 +1,4 @@
-import { Category } from "../../database/models";
+import { Category, TouristAttractions } from "../../database/models";
 import { page, pageSize } from "../helpers/Paginate";
 
 class CategoryRepository {
@@ -41,6 +41,14 @@ class CategoryRepository {
 
   static async destroy(options) {
     return await Category.destroy(options);
+  }
+
+  static async getAttractionById(id) {
+    return await TouristAttractions.findAll({
+      where: {
+        categoryId: id
+      }
+    });
   }
 }
 export default CategoryRepository;

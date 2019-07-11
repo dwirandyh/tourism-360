@@ -170,6 +170,22 @@ class CategoryController {
       res.status(500).send("Server Error");
     }
   }
+
+  static async getAttraction(req, res) {
+    const id = req.params.id;
+    let category = await CategoryRepository.detail(id);
+    if (!category) {
+      return res.status(404).json({ errors: "Category not found" });
+    }
+
+    try {
+      const attractions = await CategoryRepository.getAttractionById(id);
+      return res.json(attractions);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server Error");
+    }
+  }
 }
 
 export default CategoryController;

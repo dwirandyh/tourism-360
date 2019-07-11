@@ -44,5 +44,9 @@ class TouristAttractionRepository {
       order: [["view", "DESC"]]
     });
   }
+
+  static async searchAttraction(options) {
+    return await TouristAttractions.findAll(options);
+  }
 }
 export default TouristAttractionRepository;
