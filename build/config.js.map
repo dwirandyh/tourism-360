@@ -1,0 +1,1 @@
+{"version":3,"sources":["../src/config.js"],"names":["PORT","JWT_SECRET"],"mappings":";;;;;AAAO,IAAMA,sBAAO,IAAb;AACA,IAAMC,kCAAa,MAAnB","file":"config.js","sourcesContent":["export const PORT = 5000;\r\nexport const JWT_SECRET = 123456;\r\n"]}

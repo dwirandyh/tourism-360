@@ -1,10 +1,10 @@
 process.env.NODE_ENV = "test";
 
-import { Category } from "../../database/models";
+import { Category } from "../database/models";
 import chai from "chai";
 import chaiHttp from "chai-http";
 import server from "../../index";
-import { User } from "../../database/models";
+import { User } from "../database/models";
 
 const expect = chai.expect;
 

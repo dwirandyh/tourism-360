@@ -3,11 +3,7 @@ process.env.NODE_ENV = "test";
 import chai from "chai";
 import chaiHttp from "chai-http";
 import server from "../../index";
-import {
-  User,
-  TouristAttractions,
-  TouristGallery
-} from "../../database/models";
+import { User, TouristAttractions, TouristGallery } from "../database/models";
 
 const expect = chai.expect;
 
